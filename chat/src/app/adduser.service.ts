@@ -7,7 +7,7 @@ const SERVER_URL = "http://localhost:3000/adduser";
 @Injectable({
   providedIn: "root"
 })
-export class Adduserervice {
+export class AdduserService {
   private socket;
 
   constructor() {}

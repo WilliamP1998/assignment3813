@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { Adduserervice } from "../adduser.service";
+import { AdduserService } from "../adduser.service";
 import { GroupService } from "../group.service";
 import { LoginService } from "../login.service";
 
@@ -36,7 +36,7 @@ export class GroupComponent implements OnInit {
   dname = "";
 
   constructor(
-    private addservice: Adduserervice,
+    private addservice: AdduserService,
     private groupservice: GroupService,
     private loginservice: LoginService
   ) {}
