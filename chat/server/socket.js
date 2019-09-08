@@ -1,9 +1,11 @@
 module.exports = {
   connect: function(io, PORT) {
-    io.on("connection", socket => {
-      console.log("user connection on port " + PORT + " : " + socket.io);
-      socket.on("message", message => {
-        io.emit("message", message);
+    const login = io.of("/login");
+
+    login.on("connection", socket => {
+      socket.on("login", () => {
+        userlist = JSON.parse(fs.readFileSync("./users.json", "utf8"));
+        login.emit("login", JSON.stringify(userlist));
       });
     });
   }
