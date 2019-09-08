@@ -6,13 +6,15 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { GroupComponent } from './group/group.component';
 import { UsersComponent } from './users/users.component';
+import { ChannelComponent } from './channel/channel.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     GroupComponent,
-    UsersComponent
+    UsersComponent,
+    ChannelComponent
   ],
   imports: [
     BrowserModule,
