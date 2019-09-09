@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { LoginService } from "../login.service";
-
+import { GroupService } from "../group.service";
 import { Router } from "@angular/router";
 
 @Component({
@@ -11,11 +11,30 @@ import { Router } from "@angular/router";
 export class LoginComponent implements OnInit {
   username: string = "";
   user = [];
+  groups = [];
+  channels = [];
 
-  constructor(private loginservice: LoginService, private router: Router) {}
+  constructor(
+    private loginservice: LoginService,
+    private router: Router,
+    private groupservice: GroupService
+  ) {}
 
   ngOnInit() {
     this.loginservice.initSocket();
+    this.loginservice.login();
+    this.loginservice.logined(res => {
+      this.user = JSON.parse(res);
+    });
+    this.groupservice.initSocket();
+    this.groupservice.getgroup();
+    this.groupservice.getgrouped(res => {
+      this.groups = JSON.parse(res);
+    });
+    this.groupservice.getchannel();
+    this.groupservice.getchanneled(res => {
+      this.channels = JSON.parse(res);
+    });
   }
 
   login() {

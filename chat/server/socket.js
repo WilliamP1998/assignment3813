@@ -1,3 +1,5 @@
+var fs = require("fs");
+
 module.exports = {
   connect: function(io, PORT) {
     const login = io.of("/login");
@@ -8,6 +10,31 @@ module.exports = {
         login.emit("login", JSON.stringify(userlist));
       });
     });
+
+    const users = io.of("/users");
+
+    users.on("connection", socket => {
+      //change role of the user
+
+      socket.on("changeRole", (user, role) => {
+        var list = fs.readFileSync("./users.json", "utf8");
+        let userlist = JSON.parse(list);
+
+        for (let i = 0; i < userlist.length; i++) {
+          if (user.toString() === userlist[i].name.toString()) {
+            userlist[i].role = role;
+
+            fs.writeFileSync("./users.json", JSON.stringify(userlist), function(
+              err
+            ) {
+              if (err) throw err;
+              console.log("updated");
+            });
+          }
+        }
+      });
+    });
+
     const adduser = io.of("/adduser");
 
     adduser.on("connection", socket => {
