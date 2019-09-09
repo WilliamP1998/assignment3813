@@ -16,14 +16,17 @@ export class UseraddService {
     this.socket = io(SERVER_URL);
   }
 
+  //add user
   adduser(user): void {
     this.socket.emit("adduser", user);
   }
 
+  //add group
   addgroup(username, groupname) {
     this.socket.emit("addgroup", username, groupname);
   }
 
+  //delete user
   delete(username) {
     this.socket.emit("deleteuser", username);
   }

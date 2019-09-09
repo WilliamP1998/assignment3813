@@ -92,6 +92,7 @@ export class GroupComponent implements OnInit {
     this.username = username;
   }
 
+  // add user
   adduser() {
     if (this.admin == "Super Admin") {
       var newuser = {
@@ -132,6 +133,7 @@ export class GroupComponent implements OnInit {
     location.reload();
   }
 
+  //create group
   creategroup() {
     var username = localStorage.getItem("username");
     var empty = [];
@@ -150,6 +152,7 @@ export class GroupComponent implements OnInit {
     location.reload();
   }
 
+  //remove group from current group list
   remove(groupname) {
     var username = localStorage.getItem("username");
     for (let i = 0; i < this.groups.length; i++) {
@@ -162,6 +165,7 @@ export class GroupComponent implements OnInit {
     location.reload();
   }
 
+  //add channel from selected group
   addchannel(groupname) {
     var username = localStorage.getItem("username");
     var empty = [];
@@ -176,38 +180,38 @@ export class GroupComponent implements OnInit {
     location.reload();
   }
 
+  //remove channel from selected group
   removechannel(channelname, groupname) {
     this.groupservice.removechannel(this.currentChannel, groupname);
     location.reload();
   }
 
+  //delete user
   deleteuser() {
     this.addservice.delete(this.deleteusername);
     location.reload();
   }
 
+  //go to the selected channel
   go(channelname) {
     localStorage.setItem("channelname", JSON.stringify(channelname));
   }
 
-  addassis(groupname) {
-    this.groupservice.addassistogroup(groupname, this.assisname);
-    alert("add successful");
-    location.reload();
-  }
-
+  //add member to selected group
   addmember(groupname) {
     this.groupservice.addmember(groupname, this.aname);
     alert("successful");
     location.reload();
   }
 
+  //delete member from the group
   deletemember(groupname) {
     this.groupservice.deletemember(groupname, this.dname);
     alert("successful");
     location.reload();
   }
 
+  // add user to the group
   getaddgroupuser(groupmember) {
     var users = this.users;
     var addgroupuser = [];

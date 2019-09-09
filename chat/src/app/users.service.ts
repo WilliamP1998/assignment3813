@@ -15,6 +15,7 @@ export class UsersService {
     this.socket = io(SERVER_URL);
   }
 
+  //change role of the user
   changeRole(user, role) {
     this.socket.emit("changeRole", user, role);
     console.log(user, role);

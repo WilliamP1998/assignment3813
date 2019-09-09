@@ -4,6 +4,7 @@ module.exports = {
   connect: function(io) {
     const login = io.of("/login");
 
+    //return users list
     login.on("connection", socket => {
       socket.on("login", () => {
         userlist = JSON.parse(fs.readFileSync("./users.json", "utf8"));
@@ -14,6 +15,7 @@ module.exports = {
     const useradd = io.of("/useradd");
 
     useradd.on("connection", socket => {
+      //add user
       socket.on("adduser", user => {
         fs.writeFileSync("./users.json", user, function(err) {
           if (err) throw err;
@@ -21,6 +23,7 @@ module.exports = {
         });
       });
 
+      //add group
       socket.on("addgroup", (username, groupname) => {
         var list = fs.readFileSync("./users.json", "utf8");
         let userlist = JSON.parse(list);
@@ -38,6 +41,7 @@ module.exports = {
         });
       });
 
+      //delete user from the database
       socket.on("deleteuser", username => {
         var list = fs.readFileSync("./users.json", "utf8");
         let userlist = JSON.parse(list);
@@ -92,6 +96,7 @@ module.exports = {
     users.on("connection", socket => {
       //change role of the user
 
+      //change role of the user
       socket.on("changeRole", (user, role) => {
         var list = fs.readFileSync("./users.json", "utf8");
         let userlist = JSON.parse(list);
@@ -168,6 +173,7 @@ module.exports = {
         });
       });
 
+      //add member to the group
       socket.on("addmember", (groupname, username) => {
         grouplist = JSON.parse(fs.readFileSync("./group.json", "utf8"));
 
@@ -184,6 +190,7 @@ module.exports = {
         });
       });
 
+      //delete member from the group
       socket.on("deletemember", (groupname, username) => {
         grouplist = JSON.parse(fs.readFileSync("./group.json", "utf8"));
         for (let i = 0; i < grouplist.length; i++) {
@@ -226,11 +233,13 @@ module.exports = {
         });
       });
 
+      //get channel list
       socket.on("getchannel", () => {
         channellist = JSON.parse(fs.readFileSync("./channel.json", "utf8"));
         groups.emit("getchannel", JSON.stringify(channellist));
       });
 
+      //add channel to selected group
       socket.on("addchannel", channel => {
         channellist = JSON.parse(fs.readFileSync("./channel.json", "utf8"));
         channellist.push(channel);
@@ -256,6 +265,7 @@ module.exports = {
         });
       });
 
+      //remove channel from selected group
       socket.on("removechannel", (channelname, groupname) => {
         channellist = JSON.parse(fs.readFileSync("./channel.json", "utf8"));
         for (let i = 0; i < channellist.length; i++) {

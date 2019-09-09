@@ -105,24 +105,4 @@ export class ChannelComponent implements OnInit {
     });
     this.username = username;
   }
-
-  adduser() {
-    // add username to channel
-    this.groupservice.addusertochannel(
-      this.addusername,
-      this.channelname,
-      this.group
-    );
-    alert("add successful");
-    location.reload();
-  }
-
-  deleteuser() {
-    this.groupservice.deleteusertochannel(
-      this.deleteusername,
-      this.channelname
-    );
-    alert("delete successful");
-    location.reload();
-  }
 }
