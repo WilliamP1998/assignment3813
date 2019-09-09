@@ -1,3 +1,45 @@
-<p>
-  users works!
-</p>
+<body>
+  <div class="table-title">
+    <h3>Users</h3>
+  </div>
+  <table class="table-fill">
+    <thead>
+      <tr>
+        <th class="text-left">Name</th>
+        <th class="text-left">Role</th>
+      </tr>
+    </thead>
+    <tbody class="table-hover">
+      <ng-container *ngFor="let user of users">
+        <tr>
+          <td class="text-left">{{ user.name }}</td>
+          <td class="text-left">
+            {{ user.role }}
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+  <h1 *ngIf="superAdmin">Manage User</h1>
+  <br />
+  <select [(ngModel)]="currentUser" name="currentUser" *ngIf="superAdmin">
+    <option *ngFor="let user of users">
+      {{ user.name }}
+    </option>
+  </select>
+  <select [(ngModel)]="currentRole" name="currentRole" *ngIf="superAdmin">
+    <option *ngFor="let user of users">
+      {{ user.role }}
+    </option>
+  </select>
+  <button
+    class="btn btn-primary"
+    (click)="changeRole(name, role)"
+    *ngIf="superAdmin"
+  >
+    Change Role
+  </button>
+  <br />
+
+  <br /><br />
+</body>

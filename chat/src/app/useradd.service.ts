@@ -2,12 +2,12 @@ import { Injectable } from "@angular/core";
 import * as io from "socket.io-client";
 import { nextTick } from "q";
 
-const SERVER_URL = "http://localhost:3000/adduser";
+const SERVER_URL = "http://localhost:3000/useradd";
 
 @Injectable({
   providedIn: "root"
 })
-export class AdduserService {
+export class UseraddService {
   private socket;
 
   constructor() {}
@@ -16,8 +16,8 @@ export class AdduserService {
     this.socket = io(SERVER_URL);
   }
 
-  add(user): void {
-    this.socket.emit("add", user);
+  adduser(user): void {
+    this.socket.emit("adduser", user);
   }
 
   addgroup(username, groupname) {

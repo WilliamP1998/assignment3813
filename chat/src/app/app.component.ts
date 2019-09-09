@@ -10,12 +10,12 @@ export class AppComponent {
   login = true;
 
   constructor() {
-    this.removelogin();
+    this.hidelogin();
   }
 
   ngOnInit() {}
 
-  removelogin() {
+  hidelogin() {
     let username = localStorage.getItem("username");
     if (username) {
       this.login = false;

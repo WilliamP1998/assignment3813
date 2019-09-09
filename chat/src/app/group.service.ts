@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import * as io from "socket.io-client";
+import { nextTick } from "q";
 
 const SERVER_URL = "http://localhost:3000/group";
 
@@ -59,11 +60,11 @@ export class GroupService {
     this.socket.emit("addassistogroup", groupname, assisname);
   }
 
-  addusertogroup(groupname, username) {
-    this.socket.emit("adduser", groupname, username);
+  addmember(groupname, username) {
+    this.socket.emit("addmember", groupname, username);
   }
 
-  deluserofgroup(groupname, username) {
-    this.socket.emit("deluser", groupname, username);
+  deletemember(groupname, username) {
+    this.socket.emit("deletemember", groupname, username);
   }
 }

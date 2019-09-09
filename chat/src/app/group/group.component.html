@@ -58,16 +58,12 @@
   </table>
 
   <br />
-  <h3>Manage Group Member</h3>
+  <h3 *ngIf="superAdmin || groupAdmin">Manage Group Member</h3>
   <br />
   <ng-container *ngFor="let group of showngroups">
-    <h4>{{ group.name }}</h4>
+    <h4 *ngIf="superAdmin || groupAdmin">group {{ group.name }}</h4>
     <br />
-    <select
-      [(ngModel)]="aname"
-      name="aname"
-      *ngIf="groupAdmin || superAdmin || groupAssist"
-    >
+    <select [(ngModel)]="aname" name="aname" *ngIf="groupAdmin || superAdmin">
       <option *ngFor="let user of getaddgroupuser(group.members)">
         {{ user }}
       </option>
@@ -75,33 +71,31 @@
 
     <button
       class="btn btn-primary"
-      (click)="adduser(group.name)"
-      *ngIf="groupAdmin || superAdmin || groupAssist"
+      (click)="addmember(group.name)"
+      *ngIf="groupAdmin || superAdmin"
     >
       Add member</button
     ><br />
-    <select
-      [(ngModel)]="dname"
-      name="dname"
-      *ngIf="groupAdmin || superAdmin || groupAssist"
-    >
+    <select [(ngModel)]="dname" name="dname" *ngIf="groupAdmin || superAdmin">
       <option *ngFor="let user of group.members">
         {{ user }}
       </option>
     </select>
     <button
       class="btn btn-primary"
-      (click)="deluser(group.name)"
-      *ngIf="groupAdmin || superAdmin || groupAssist"
+      (click)="deletemember(group.name)"
+      *ngIf="groupAdmin || superAdmin"
     >
       Delete member</button
     ><br />
   </ng-container>
   <br />
-  <h3>Manage Channels</h3>
+  <h3 *ngIf="superAdmin || groupAdmin || groupAssist">Manage Channels</h3>
   <br />
   <ng-container *ngFor="let group of showngroups">
-    <h4>{{ group.name }}</h4>
+    <h4 *ngIf="superAdmin || groupAdmin || groupAssist">
+      group {{ group.name }}
+    </h4>
 
     <select
       [(ngModel)]="currentChannel"
@@ -209,7 +203,7 @@
     <div class="form-group">
       <!-- Submit Button -->
       <div class="col-sm-10 col-sm-offset-2">
-        <button type="submit" (click)="add()" class="btn btn-primary">
+        <button type="submit" (click)="adduser()" class="btn btn-primary">
           Create
         </button>
       </div>

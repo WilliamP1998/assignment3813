@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { AdduserService } from "../adduser.service";
+import { UseraddService } from "../useradd.service";
 import { GroupService } from "../group.service";
 import { LoginService } from "../login.service";
 
@@ -36,7 +36,7 @@ export class GroupComponent implements OnInit {
   dname = "";
 
   constructor(
-    private addservice: AdduserService,
+    private addservice: UseraddService,
     private groupservice: GroupService,
     private loginservice: LoginService
   ) {}
@@ -92,7 +92,7 @@ export class GroupComponent implements OnInit {
     this.username = username;
   }
 
-  add() {
+  adduser() {
     if (this.admin == "Super Admin") {
       var newuser = {
         name: this.name,
@@ -128,7 +128,7 @@ export class GroupComponent implements OnInit {
     }
     this.users.push(newuser);
     let newupload = JSON.stringify(this.users);
-    this.addservice.add(newupload);
+    this.addservice.adduser(newupload);
     location.reload();
   }
 
@@ -196,32 +196,16 @@ export class GroupComponent implements OnInit {
     location.reload();
   }
 
-  adduser(groupname) {
-    this.groupservice.addusertogroup(groupname, this.aname);
+  addmember(groupname) {
+    this.groupservice.addmember(groupname, this.aname);
     alert("successful");
     location.reload();
   }
 
-  deluser(groupname) {
-    this.groupservice.deluserofgroup(groupname, this.dname);
+  deletemember(groupname) {
+    this.groupservice.deletemember(groupname, this.dname);
     alert("successful");
     location.reload();
-  }
-
-  //check the current is assis,admin,super or not
-  checkauth(groupname) {
-    for (let i = 0; i < this.grouplist.length; i++) {
-      if (groupname == this.grouplist[i].name) {
-        for (let j = 0; j < this.grouplist[i].assis.length; j++) {
-          if (this.username == this.grouplist[i].assis[j]) {
-            return true;
-          }
-        }
-      }
-    }
-    if (this.groupAdmin == true || this.superAdmin == true) {
-      return true;
-    }
   }
 
   getaddgroupuser(groupmember) {
