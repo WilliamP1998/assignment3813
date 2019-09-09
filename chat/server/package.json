@@ -9,9 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "socker.io": "0.0.0-alpha-beta"
+    "socket.io": "^2.2.0",
+    "socketio": "^1.0.0"
   }
 }

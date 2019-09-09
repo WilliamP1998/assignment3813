@@ -1,7 +1,7 @@
 var fs = require("fs");
 
 module.exports = {
-  connect: function(io, PORT) {
+  connect: function(io) {
     const login = io.of("/login");
 
     login.on("connection", socket => {
@@ -11,34 +11,10 @@ module.exports = {
       });
     });
 
-    const users = io.of("/users");
+    const useradd = io.of("/useradd");
 
-    users.on("connection", socket => {
-      //change role of the user
-
-      socket.on("changeRole", (user, role) => {
-        var list = fs.readFileSync("./users.json", "utf8");
-        let userlist = JSON.parse(list);
-
-        for (let i = 0; i < userlist.length; i++) {
-          if (user.toString() === userlist[i].name.toString()) {
-            userlist[i].role = role;
-
-            fs.writeFileSync("./users.json", JSON.stringify(userlist), function(
-              err
-            ) {
-              if (err) throw err;
-              console.log("updated");
-            });
-          }
-        }
-      });
-    });
-
-    const adduser = io.of("/adduser");
-
-    adduser.on("connection", socket => {
-      socket.on("add", user => {
+    useradd.on("connection", socket => {
+      socket.on("adduser", user => {
         fs.writeFileSync("./users.json", user, function(err) {
           if (err) throw err;
           console.log("updated");
@@ -110,6 +86,31 @@ module.exports = {
         );
       });
     });
+
+    const users = io.of("/users");
+
+    users.on("connection", socket => {
+      //change role of the user
+
+      socket.on("changeRole", (user, role) => {
+        var list = fs.readFileSync("./users.json", "utf8");
+        let userlist = JSON.parse(list);
+
+        for (let i = 0; i < userlist.length; i++) {
+          if (user.toString() === userlist[i].name.toString()) {
+            userlist[i].role = role;
+
+            fs.writeFileSync("./users.json", JSON.stringify(userlist), function(
+              err
+            ) {
+              if (err) throw err;
+              console.log("updated");
+            });
+          }
+        }
+      });
+    });
+
     const groups = io.of("/group");
 
     groups.on("connection", socket => {
@@ -117,13 +118,13 @@ module.exports = {
       socket.on("getgroup", () => {
         grouplist = JSON.parse(fs.readFileSync("./group.json", "utf8"));
         groups.emit("getgroup", JSON.stringify(grouplist));
-        console.log(JSON.stringify(grouplist));
       });
 
       // add group to grouplist
       socket.on("addgroup", group => {
         grouplist = JSON.parse(fs.readFileSync("./group.json", "utf8"));
         grouplist.push(JSON.parse(group));
+
         fs.writeFileSync("./group.json", JSON.stringify(grouplist), function(
           err
         ) {
@@ -167,7 +168,7 @@ module.exports = {
         });
       });
 
-      socket.on("adduser", (groupname, username) => {
+      socket.on("addmember", (groupname, username) => {
         grouplist = JSON.parse(fs.readFileSync("./group.json", "utf8"));
 
         for (let i = 0; i < grouplist.length; i++) {
@@ -183,7 +184,7 @@ module.exports = {
         });
       });
 
-      socket.on("deluser", (groupname, username) => {
+      socket.on("deletemember", (groupname, username) => {
         grouplist = JSON.parse(fs.readFileSync("./group.json", "utf8"));
         for (let i = 0; i < grouplist.length; i++) {
           if (groupname == grouplist[i].name) {
@@ -217,21 +218,6 @@ module.exports = {
           }
         }
 
-        fs.writeFileSync("./group.json", JSON.stringify(grouplist), function(
-          err
-        ) {
-          if (err) throw err;
-          console.log("updated");
-        });
-      });
-
-      socket.on("addassistogroup", (groupname, assisname) => {
-        grouplist = JSON.parse(fs.readFileSync("./group.json", "utf8"));
-        for (let i = 0; i < grouplist.length; i++) {
-          if (groupname == grouplist[i].name) {
-            grouplist[i].assis.push(assisname);
-          }
-        }
         fs.writeFileSync("./group.json", JSON.stringify(grouplist), function(
           err
         ) {
@@ -303,71 +289,6 @@ module.exports = {
           if (err) throw err;
           console.log("updated");
         });
-      });
-
-      socket.on("addusertochannel", (username, channelname, groupname) => {
-        // add username to channel
-        channellist = JSON.parse(fs.readFileSync("./channel.json", "utf8"));
-        for (let i = 0; i < channellist.length; i++) {
-          if (channelname == channellist[i].name) {
-            channellist[i].members.push(username);
-          }
-        }
-        fs.writeFileSync(
-          "./channel.json",
-          JSON.stringify(channellist),
-          function(err) {
-            if (err) throw err;
-            console.log("updated");
-          }
-        );
-        //add username to group property
-        grouplist = JSON.parse(fs.readFileSync("./group.json", "utf8"));
-        for (let i = 0; i < grouplist.length; i++) {
-          if (groupname == grouplist[i].name) {
-            grouplist[i].members.push(username);
-          }
-        }
-        fs.writeFileSync("./group.json", JSON.stringify(grouplist), function(
-          err
-        ) {
-          if (err) throw err;
-          console.log("updated");
-        });
-        // add groupname to user property
-        var userlist = JSON.parse(fs.readFileSync("./users.json", "utf8"));
-        for (let i = 0; i < userlist.length; i++) {
-          if (username == userlist[i].name) {
-            userlist[i].grouplist.push(groupname);
-          }
-        }
-        fs.writeFileSync("./users.json", JSON.stringify(userlist), function(
-          err
-        ) {
-          if (err) throw err;
-          console.log("updated");
-        });
-      });
-
-      socket.on("deleteusertochannel", (username, channelname) => {
-        channellist = JSON.parse(fs.readFileSync("./channel.json", "utf8"));
-        for (let i = 0; i < channellist.length; i++) {
-          if (channelname == channellist[i].name) {
-            for (let j = 0; j < channellist[i].members.length; j++) {
-              if (username == channellist[i].members[j]) {
-                channellist[i].members.splice(j, 1);
-              }
-            }
-          }
-        }
-        fs.writeFileSync(
-          "./channel.json",
-          JSON.stringify(channellist),
-          function(err) {
-            if (err) throw err;
-            console.log("updated");
-          }
-        );
       });
     });
   }
